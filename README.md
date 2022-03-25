@@ -1,93 +1,74 @@
-# Intro
+# Overview
 
-QDgym is a framework for Quality Diversity (QD) Optimization benchmarks. It is built on [OpenAI Gym](https://github.com/openai/gym) and uses the same interface. QDgym is meant to unify benchmarks for QD Optimization algorithms and provide a common interface that allows easy comparisons between different QD algorithms. QDgym was born out of the desire to not perpetuate the creation of new benchmarks that are difficult/impossible to use for other researchers when developing benchmark tasks for the [PGA-MAP-Elites](https://github.com/ollenilsson19/PGA-MAP-Elites) algorithm. These benchmarks were therefore implemented as this stand-alone open-source module with no proprietary software dependencies.
+QDgym proposes a suite of tasks for Quality-Diversity (QD) optimisation. It has been originally introduced in the [PGA-MAP-Elites](https://github.com/ollenilsson19/PGA-MAP-Elites) paper and is built on [OpenAI Gym](https://github.com/openai/gym) in [PyBullet](https://github.com/bulletphysics/bullet3.git).
 
-For those new to QD Optimization, here are three exellent introductory papers in no particular order:
+This repository extends the original [QDgym benchmarks repository](https://github.com/ollenilsson19/QDgym.git) with a deterministic version of each task: QDDeterministicWalker2DBulletEnv-v0, QDDeterministicHalfCheetahBulletEnv-v0, QDDeterministicAntBulletEnv-v0, QDDeterministicHopperBulletEnv-v0 and QDDeterministicHumanoidBulletEnv-v0.
+In the original QDgym tasks, as in the initial OpenAI Gym definition, the initial joint-positions of all robots are sampled from a Gaussian distribution, making these tasks stochastic.
+In the Deterministic QDgym tasks we propose to set these initial positions to 0.
 
-+ [Quality Diversity: A New Frontier for Evolutionary Computation](http://eplex.cs.ucf.edu/papers/pugh_frontiers16.pdf)
-+ [Confronting the Challenge of Quality Diversity](https://eplex.cs.ucf.edu/papers/pugh_gecco15.pdf)
-+ [Quality and Diversity Optimization: A Unifying Modular Framework](https://arxiv.org/pdf/1708.09251.pdf)
-
-Also checkout: [https://quality-diversity.github.io/]()
-
-## Future Plans
-The current version is a v0.1 with a only the evaluation tasks of [PGA-MAP-Elites](https://github.com/ollenilsson19/PGA-MAP-Elites) implemented (plus humaniod). My plan is to add any new tasks I develop as part of my research under this format. 
 
 # Tasks
 
-Currently five tasks are implemented that build on [PyBullet](https://github.com/bulletphysics/bullet3/tree/master/examples/pybullet) robotic locomotion benchmarks where the task is to discover diverse ways to walk (Diversity aspect), where for each type of walk find the fastest walk (Quality aspect).
-
-+ Behaviour Descriptor (BD): Proportion of contact time each foot has with the ground over a walk. The BD in the QDAnt task is thus 4-D while QDHalfCheetah, QDHumanoid and QDWalker have 2-D BDs. The BD for QDHopper is 1-D.
-+ Fitness: Walking distance over 1000 simulation steps/walking speed.
-
+This repository includes 10 tasks: 5 stochastic tasks and 5 deterministic ones. In all of them, a robot aims to discover all the ways it can walk while maximising a trade-off between speed and energy consumption. 
 
 <p align="center">
-<img style="float: center;" src="fig/QD_envs2.png" width="865">
+<img style="float: center;" src="fig/QDgym_extended.png" width="865">
 </p>
 
+The details of the state, action, fitness and BD given below are the same for the stochastic and deterministic versions of each task. 
 
-### Task Details
-+ Observations: The robots current COG height, x, y and z velocity, roll, pitch
-and yaw angles and the relative position of the robots joints.
-    + QDWalker2DBulletEnv-v0: 22-dimensions.
-    + QDHalfCheetahBulletEnv-v0: 26-dimensions.
-    + QDAntBulletEnv-v0: 28-dimensions.
-    + QDHopperBulletEnv-v0: 15-dimensions.
-    + QDHumanoidBulletEnv-v0: 44-dimantions
-+ Action: The torque to apply to each joint.
-    + QDWalker2DBulletEnv-v0: 6-dimensions.
-    + QDHalfCheetah: 6-dimensions.
-    + QDAntBulletEnv-v0: 8-dimensions.
-    + QDHopperBulletEnv-v0: 3-dimensions.
-    + QDHumanoidBulletEnv-v0: 17-dimentions.
++ State: The robot's current height, x, y and z velocity, roll, pitch and yaw angles of the centre of gravity and position of the joints.
+    + QDWalker: 22 dimensions
+    + QDHalfCheetah: 26 dimensions
+    + QDAnt: 28 dimensions
+    + QDHopper: 15 dimensions
+    + QDHumanoid: 44 dimensions
++ Action: Continuous-valued torques applied in each robot joints.
+    + QDWalker: 6 dimensions
+    + QDHalfCheetah: 6 dimensions
+    + QDAnt: 8 dimensions
+    + QDHopper: 3 dimensions
+    + QDHumanoid: 17 dimensions
++ Fitness: In all tasks, the fitness is defined as in the original Gym tasks, as the accumulated forward progress made over the lifespan of the simulation (1000 steps) with an energy usage penalty and a reward for surviving each time-step of the simulation.
 + Behavioural Descriptor: The time proportion each foot of the robot is in contact with the ground (scaled to range from 0 to 1).
-    + QDWalker2DBulletEnv-v0: 2-dimensions.
-    + QDHalfCheetahBulletEnv-v0: 2-dimensions.
-    + QDAntBulletEnv-v0: 4-dimensions.
-    + QDHopperBulletEnv-v0: 1-dimension.
-    + QDHumanoidBulletEnv-v0: 2-dimensions.
+    + QDWalker: 2 dimensions
+    + QDHalfCheetah: 2 dimensions
+    + QDAnt: 4 dimensions
+    + QDHopper: 1 dimension
+    + QDHumanoid: 2 dimensions
 
 
 # Installation and Use
 
-Installation is easy with pip. Just do:
+You can install the QDgym_extended package using pip by executing the following command:
 
 ```
-pip3 install git+https://github.com/ollenilsson19/QDgym.git#egg=QDgym
+pip3 install git+https://github.com/adaptive-intelligent-robotics/QDgym_extended.git#egg=QDgym_extended
 ```
 
-this will also automatically install the dependencies requred (gym, pybullet, numpy).
-
-If the installation fails, it will likely be due to your pip version being too old for the requirements of opencv (gym dependency). See: https://pypi.org/project/opencv-python/. The solution is likely to upgrade pip.
-
-```
-pip install --upgrade pip
-```
-
-To run tasks with QDgym follow the below structure: 
+The interface of the tasks is similar to those of other [Gym tasks](http://arxiv.org/abs/1606.01540). We give below a simple example for QDDeterministicWalker2DBulletEnv-v0, to switch to any other QDgym environment you would just need to change the name when creating the Gym environment.
 
 ``` python
-# imports
+# Imports
 import gym
-import QDgym
+import QDgym_extended
 
-# make environment
-env = gym.make("env_name")
-# reset environment
+# Make environment
+env = gym.make("QDDeterministicWalker2DBulletEnv-v0")
+
+# Reset environment
 state = env.reset()
 done = False
-# eval loop
+
+# Evaluation loop
 while not done: 
-    action = controller.select_action(state)
+    action = env.action_space.sample() # Sampling some random action
     state, reward, done, info = env.step(action) 
-# get fitness and BD
+
+# Get final fitness and BD
 fitness = env.tot_reward
 behaviour_descriptor = env.desc # alternatively behaviour_descriptor = info["bc"] for compatability with the code released for MAP-Elites-ES
-# close environment
+
+# Close environment
 env.close()
 ```
-
-The above example assumes there is a defined `controller` with a method `select_action` that for a given input (state) outputs the desired action. Replace `env_name` with your desired task (QDWalker2DBulletEnv-v0, QDHalfCheetahBulletEnv-v0, QDAntBulletEnv-v0, QDHopperBulletEnv-v0, QDHumanoidBulletEnv-v0).
-
-For more detailed example use see `main.py` and `vectorized_env.py` in the [PGA-MAP-Elites implemetation](https://github.com/ollenilsson19/PGA-MAP-Elites).
-
