@@ -2,20 +2,26 @@
 
 QDgym proposes a suite of tasks for Quality-Diversity (QD) optimisation. It has been originally introduced in the [PGA-MAP-Elites](https://github.com/ollenilsson19/PGA-MAP-Elites) paper and is built on [OpenAI Gym](https://github.com/openai/gym) in [PyBullet](https://github.com/bulletphysics/bullet3.git).
 
-This repository extends the original [QDgym benchmarks repository](https://github.com/ollenilsson19/QDgym.git) with a deterministic version of each task: QDDeterministicWalker2DBulletEnv-v0, QDDeterministicHalfCheetahBulletEnv-v0, QDDeterministicAntBulletEnv-v0, QDDeterministicHopperBulletEnv-v0 and QDDeterministicHumanoidBulletEnv-v0.
+This repository extends the original [QDgym benchmarks repository](https://github.com/ollenilsson19/QDgym.git) with an omnidirectional-descriptor Ant task: QDAntOmnidirectionalBulletEnv-v0.
+It also proposes deterministic version of all tasks: QDDeterministicWalker2DBulletEnv-v0, QDDeterministicHalfCheetahBulletEnv-v0, QDDeterministicAntBulletEnv-v0, QDDeterministicHopperBulletEnv-v0, QDDeterministicHumanoidBulletEnv-v0, and QDDeterministicAntOmnidirectionalBulletEnv-v0.
 In the original QDgym tasks, as in the initial OpenAI Gym definition, the initial joint-positions of all robots are sampled from a Gaussian distribution, making these tasks stochastic.
 In the Deterministic QDgym tasks we propose to set these initial positions to 0.
 
 
 # Tasks
 
-This repository includes 10 tasks: 5 stochastic tasks and 5 deterministic ones. In all of them, a robot aims to discover all the ways it can walk while maximising a trade-off between speed and energy consumption. 
+This repository includes 12 tasks: 6 stochastic tasks and 6 deterministic ones, using the robots illustrated below.
+Among these tasks, 10 are unidirectional and 2 omnidirectional.
+In the unidirectional tasks, a robot aims to discover all the ways it can walk while maximising a trade-off between speed and energy consumption. 
+In the omnidirectional tasks, the robot aims to learn how it can reach all possible [x, y] position in a given time-limit, while minimising its energy consumption.
 
 <p align="center">
 <img style="float: center;" src="fig/QDgym_extended.png" width="865">
 </p>
 
 The details of the state, action, fitness and BD given below are the same for the stochastic and deterministic versions of each task. 
+
+## Unidirectional tasks
 
 + State: The robot's current height, x, y and z velocity, roll, pitch and yaw angles of the centre of gravity and position of the joints.
     + QDWalker: 22 dimensions
@@ -36,6 +42,15 @@ The details of the state, action, fitness and BD given below are the same for th
     + QDAnt: 4 dimensions
     + QDHopper: 1 dimension
     + QDHumanoid: 2 dimensions
+
+## Omnidirectional tasks
+
++ State: The robot's current height, x, y position, x, y and z velocity, roll, pitch and yaw angles of the centre of gravity and position of the joints.
+    + QDAntOmnidirectional: 30 dimensions
++ Action: Continuous-valued torques applied in each robot joints.
+    + QDAntOmnidirectional: 8 dimensions
++ Fitness: the fitness contains only a part of the original Gym reward, it is defined as the energy usage penalty and a reward for surviving each time-step of the simulation.
++ Behavioural Descriptor: for all robots it is defined as the two-dimensional final x,y position of the robot.
 
 
 # Installation and Use

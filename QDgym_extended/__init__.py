@@ -42,6 +42,12 @@ register(id='QDHumanoidBulletEnv-v0',
          max_episode_steps=1000)
 
 
+register(id='QDAntOmnidirectionalBulletEnv-v0',
+         entry_point='QDgym_extended.QDgym_antomni_env:QDAntOmnidirectionalBulletEnv',
+         max_episode_steps=1000,
+         reward_threshold=2500.0)
+
+
 # ------------QDgym-deterministic-------------
 
 register(id='QDDeterministicWalker2DBulletEnv-v0',
@@ -67,10 +73,16 @@ register(id='QDDeterministicHopperBulletEnv-v0',
          max_episode_steps=1000,
          reward_threshold=2500.0)
 
+
 register(id='QDDeterministicHumanoidBulletEnv-v0',
          entry_point='QDgym_extended.QDgym_deterministic_envs:QDDeterministicHumanoidBulletEnv',
 	 max_episode_steps=1000)
 
+
+register(id='QDDeterministicAntOmnidirectionalBulletEnv-v0',
+         entry_point='QDgym_extended.QDgym_deterministic_antomni_env:QDDeterministicAntOmnidirectionalBulletEnv',
+         max_episode_steps=1000,
+         reward_threshold=2500.0)
 
 
 def getList():
